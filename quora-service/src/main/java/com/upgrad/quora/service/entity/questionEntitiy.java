@@ -4,9 +4,15 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
+
 //This model is implemented to map with question table in DB
 @Entity
 @Table(name = "question")
+@NamedQueries({
+        @NamedQuery(name = "performFetchAllQuestions", query = "Select q from questionEntitiy q"),
+        @NamedQuery(name = "performQuestionGetByIdQuery", query = "Select q from questionEntitiy q where q.id=:questionId"),
+        @NamedQuery(name = "performFetchAllQuestionsByUser", query = "Select q from questionEntitiy q where q.userId=:userId")
+})
 public class questionEntitiy {
 
     //id field is primary key
@@ -72,8 +78,4 @@ public class questionEntitiy {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-
-
-
-
 }

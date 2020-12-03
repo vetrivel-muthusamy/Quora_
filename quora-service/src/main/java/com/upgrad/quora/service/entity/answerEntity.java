@@ -1,5 +1,8 @@
 package com.upgrad.quora.service.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
@@ -8,7 +11,12 @@ import java.sql.Timestamp;
 This model class maps to the answer table in DB
  */
 @Entity
-@Table(name = "answer")
+@Table(name = "answer", schema = "public")
+@NamedQueries({
+
+        @NamedQuery(name = "getAnswerByUuid", query = "select u from answerEntity u where u.uuid=:uuid"),
+        @NamedQuery(name = "getAnswersByQuestionId", query = "select u from answerEntity u where u.question=:question"),
+})
 public class answerEntity {
     //id column is primary key
     @Id
@@ -25,6 +33,17 @@ public class answerEntity {
     @Column(name = "ans")
     @Size(max = 255)
     private String answer;
+
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UserEntity user;
+
+    public UserEntity getUser() {
+        return user;
+    }
+
 
     //date column will contain the date
     @Column(name = "date")
